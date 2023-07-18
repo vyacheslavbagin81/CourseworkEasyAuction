@@ -10,7 +10,7 @@ import ru.skypro.coursework.courseworkeasyauction.service.bid.BidService;
 @Data
 @RestController
 @RequestMapping("/lot")
-public class BidsController {
+public class BidController {
     private final BidService bidService;
 
     //    Возвращает первого ставившего на этот лот
@@ -27,8 +27,8 @@ public class BidsController {
 
     //    Сделать ставку по лоту
     @PostMapping("/{id}/bid")
-    public ResponseEntity<?> placeABet(@PathVariable int id, @RequestBody String bidderName) {
-        return new  ResponseEntity<>(bidService.placeABet(id, bidderName), HttpStatus.OK);
+    public ResponseEntity<?> placeABet(@PathVariable int id, @RequestBody Bid bid) {
+        return new  ResponseEntity<>(bidService.placeABet(id, bid), HttpStatus.OK);
     }
 
 }

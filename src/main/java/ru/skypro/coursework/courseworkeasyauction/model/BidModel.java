@@ -24,7 +24,6 @@ public class BidModel {
 
     public BidModel(String bidderName, LotModel lot) {
         this.bidderName = bidderName;
-        this.bidDate = LocalDateTime.now();
         this.lot = lot;
     }
 }

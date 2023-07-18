@@ -7,7 +7,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +33,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 public class LotServiceImpl implements LotService {
-    @Autowired
     private final LotRepository lotRepository;
 
     private final String[] HEADERS = {
@@ -48,43 +46,43 @@ public class LotServiceImpl implements LotService {
             "lastBidName",
             "lastBidData"
     };
-    private static final Logger logger = LoggerFactory.getLogger(LotServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LotServiceImpl.class);
 
 
     @Override
     public FullLot getFullLot(int id) {
-        logger.info("выполняется метод для вывода полной информации о лоте по id");
+        LOGGER.info("выполняется метод для вывода полной информации о лоте по id");
         return FullLotMap.toFullLot(lotRepository.getFullLotById(id));
     }
 
     @Override
     public String startBidding(int id) {
-        logger.info("выполняется метод для старта торгов");
+        LOGGER.info("выполняется метод для старта торгов");
         LotModel lotModel = lotRepository.findById(id).orElseThrow(NotIdException::new);
         lotModel.setStatus(StatusLot.STARTED);
         lotRepository.save(lotModel);
-        logger.debug("изменен статус лота в базе данных");
+        LOGGER.debug("изменен статус лота в базе данных");
         return "Лот переведен в статус начато";
     }
 
 
     @Override
     public String stopBidding(int id) {
-        logger.info("выполняется метод для остановки торгов");
+        LOGGER.info("выполняется метод для остановки торгов");
         LotModel lotModel = lotRepository.findById(id).orElseThrow(NotIdException::new);
         lotModel.setStatus(StatusLot.STOPPED);
         lotRepository.save(lotModel);
-        logger.debug("изменен статус лота в базе данных");
+        LOGGER.debug("изменен статус лота в базе данных");
         return "Лот перемещен в статус остановлен";
     }
 
     @Override
     public Lot createLot(CreateLot lot) {
-        logger.info("выполняется метод для создания лота");
+        LOGGER.info("выполняется метод для создания лота");
         if (CheckCreateLot.checkCreateLot(lot)) {
             LotModel lotModel = LotMap.mapToLotModel(lot);
             lotRepository.save(lotModel);
-            logger.debug("лот сохранен в базу данных");
+            LOGGER.debug("лот сохранен в базу данных");
             return LotMap.mapToLot(lotModel);
         }
         throw new DataException();
@@ -92,16 +90,16 @@ public class LotServiceImpl implements LotService {
 
     @Override
     public Set<Lot> getSetLot(String status, int page) {
-        logger.info("выполняется метод для вывода информации о лотах в зависимости от указаного статуса и номера страницы базы данных");
+        LOGGER.info("выполняется метод для вывода информации о лотах в зависимости от указаного статуса и номера страницы базы данных");
         Pageable pageable = PageRequest.of(page, 10);
         Page<LotModel> lotModelPage = lotRepository.findAll(pageable);
         Set<Lot> lots = lotModelPage.stream().map(LotMap::mapToLot).collect(Collectors.toSet());
-        return lots.stream().filter(lot -> lot.getStatus().getStatus().equals(status)).collect(Collectors.toSet());
+        return lots.stream().filter(lot -> lot.getStatus().name().equals(status)).collect(Collectors.toSet());
     }
 
     @Override
     public void getFile(PrintWriter writer) {
-        logger.info("выполняется метод для передачи данных о лотах в виде файла csv");
+        LOGGER.info("выполняется метод для передачи данных о лотах в виде файла csv");
         List<FullLot> fullLotList = lotRepository.getFullLot().stream()
                 .map(FullLotMap::toFullLot)
                 .collect(Collectors.toList());

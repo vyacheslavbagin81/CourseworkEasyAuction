@@ -12,5 +12,5 @@ public interface BidService {
     Bid getBidFrequentToId(int id);
 
     //    Сделать ставку по лоту
-    String placeABet(int id, String bidderName);
+    String placeABet(int id, Bid bid);
 }

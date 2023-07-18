@@ -19,7 +19,7 @@ import java.util.Set;
 @Data
 @RestController
 @RequestMapping("/lot")
-public class LotsController {
+public class LotController {
     private final LotService lotService;
 
     //    Получить полную информацию о лоте
