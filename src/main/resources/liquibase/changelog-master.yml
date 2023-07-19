@@ -1,6 +1,10 @@
 databaseChangeLog:
+
+  - include:
+      file: liquibase/changesets/table_lot_create.yml
+
   - include:
       file: liquibase/changesets/table_bid_create.yml
 
   - include:
-      file: liquibase/changesets/table_lot_create.yml
+      file: liquibase/changesets/update_column_bidder_name_not_unique.yml
