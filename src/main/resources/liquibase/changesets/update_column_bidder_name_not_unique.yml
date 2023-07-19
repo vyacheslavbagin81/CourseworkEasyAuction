@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19.07.2023-07:00 # идентификатор набора изменений
+      author: Vyacheslav # имя разработчика, который добавил набор изменений
+      changes: # список изменений в этом наборе
+        - update: # команда liquibase — изменяет таблицу
+            tableName: bid # название таблицы
+            columns: # колонки к данной таблице
+              - column: # колонка
+                  name: bidder_name # название колонки
+                  constraints: # ограничения колонки
+                    unique: false
